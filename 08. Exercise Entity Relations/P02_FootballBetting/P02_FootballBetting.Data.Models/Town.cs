@@ -9,6 +9,7 @@ public class Town
     public Town()
     {
         Teams = new HashSet<Team>();
+        Players = new HashSet<Player>();
     }
 
     [Key]
@@ -18,6 +19,7 @@ public class Town
     public string Name { get; set; } = null!;
     public int CountryId { get; set; }
     [ForeignKey(nameof(CountryId))]
-    public Country Country { get; set; }
-    public ICollection<Team> Teams { get; set; }
+    public virtual Country Country { get; set; }
+    public virtual ICollection<Team> Teams { get; set; }
+    public virtual ICollection<Player> Players { get; set; }
 }

@@ -1,5 +1,6 @@
 ﻿using P02_FootballBetting.Common;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace P02_FootballBetting.Data.Models;
 
@@ -7,8 +8,8 @@ public class Color
 {
     public Color()
     {
-        PrimaryKitTeams = new HashSet<Team>();
-        SecondaryKitTeams = new HashSet<Team>();
+        PrimaryKitTeams = new List<Team>();
+        SecondaryKitTeams = new List<Team>();
     }
 
     [Key]
@@ -17,6 +18,9 @@ public class Color
     [MaxLength(ValidationConstants.ColorNameMaxLength)]
     public string Name { get; set; } = null!;
 
+    [InverseProperty(nameof(Team.PrimaryColor))]
     public virtual ICollection<Team> PrimaryKitTeams { get; set; }
+
+    [InverseProperty(nameof(Team.SecondaryColor))]
     public virtual ICollection<Team> SecondaryKitTeams { get; set; }
 }

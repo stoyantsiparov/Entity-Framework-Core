@@ -6,6 +6,13 @@ namespace P02_FootballBetting.Data.Models;
 
 public class Team
 {
+    public Team()
+    {
+        HomeTeamGoals = new List<Game>();
+        AwayTeamGoals = new List<Game>();
+        Players = new HashSet<Player>();
+    }
+
     [Key]
     public int TeamId { get; set; }
     [MaxLength(ValidationConstants.TeamNameMaxLength)]
@@ -29,4 +36,7 @@ public class Team
     public int TownId { get; set; }
     [ForeignKey(nameof(TownId))]
     public virtual Town Town { get; set; }
+    public virtual ICollection<Game> HomeTeamGoals { get; set; }
+    public virtual ICollection<Game> AwayTeamGoals { get; set; }
+    public virtual ICollection<Player> Players { get; set; }
 }

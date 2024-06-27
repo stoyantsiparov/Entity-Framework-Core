@@ -13,4 +13,8 @@ public class ValidationConstants
     public const int TeamNameMaxLength = 40;
     public const int LogoUrlMaxLength = 500;
     public const int InitialsMaxLength = 3;
+    public const int PredictionMaxLength = 20;
+    public const int MaxMinutesPlayedLength = 5;
+    public const int PlayerNameMaxLength = 40;
+    public const int SquadNumberMaxLength = 2;
 }
