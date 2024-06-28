@@ -20,7 +20,13 @@ public class FootballBettingContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer(ConnectionString);
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseSqlServer(ConnectionString);
+            //optionsBuilder.UseSqlServer(Environment.GetEnvironmentVariable("ConnectionString", EnvironmentVariableTarget.User));
+        }
+
+        base.OnConfiguring(optionsBuilder);
     }
 
     public DbSet<Country> Countries { get; set; }
@@ -37,8 +43,10 @@ public class FootballBettingContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Composite primary key (GameId, PlayerId)
-        modelBuilder.Entity<PlayerStatistic>()
-            .HasKey(ps => new { ps.GameId, ps.PlayerId });
+        modelBuilder.Entity<PlayerStatistic>(entity =>
+        {
+            entity.HasKey(pk => new { pk.GameId, pk.PlayerId });
+        });
 
         modelBuilder.Entity<Team>(entity =>
         {

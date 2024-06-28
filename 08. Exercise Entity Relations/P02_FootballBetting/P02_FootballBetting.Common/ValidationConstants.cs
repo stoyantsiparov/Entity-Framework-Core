@@ -2,20 +2,35 @@
 
 public class ValidationConstants
 {
-    public const int CountryMaxNameLength = 50;
-    public const int TownMaxNameLength = 128;
-    public const int UsernameMaxLength = 50;
-    public const int PasswordMaxLength = 50;
-    public const int EmailMaxLength = 30;
-    public const int NameMaxLength = 50;
-    public const int PositionNameMaxLength = 20;
-    public const int ColorNameMaxLength = 25;
-    public const int TeamNameMaxLength = 40;
-    public const int LogoUrlMaxLength = 500;
-    public const int InitialsMaxLength = 3;
-    public const int PredictionMaxLength = 20;
-    public const int MaxMinutesPlayedLength = 5;
-    public const int PlayerNameMaxLength = 40;
-    public const int SquadNumberMaxLength = 2;
+    //Team constraints
+    public const int TeamNameLength = 255;
+    public const int TeamUrlLogoLength = 2048;
+    public const int TeamInitialsLength = 5;
+
+    //Color constraint
+    public const int ColorNameLength = 10;
+
+    //Player constraint
+    public const int PlayerNameLength = 250;
+
+    //Position constraint
+    public const int PositionNameLength = 20;
+
+    //Game constraint
     public const int GameResultLength = 5;
+
+    //Bet constraint
+    public const int BetPredictionLength = 5;
+
+    //Town constraint
+    public const int TownNameLength = 85;
+
+    //Country constraint
+    public const int CountryNameLength = 60;
+
+    //User constraints
+    public const int UserUsernameLength = 20;
+    public const int UserPasswordLength = 255;
+    public const int UserEmailLength = 320;
+    public const int UserNameLength = 255;
 }

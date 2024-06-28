@@ -9,10 +9,12 @@ public class Position
     {
         Players = new HashSet<Player>();
     }
+
     [Key]
     public int PositionId { get; set; }
 
-    [MaxLength(ValidationConstants.PositionNameMaxLength)]
-    public string Name { get; set; } = null!;
+    [MaxLength(ValidationConstants.PositionNameLength)]
+    public string Name { get; set; }
+
     public virtual ICollection<Player> Players { get; set; }
 }

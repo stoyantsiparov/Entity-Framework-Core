@@ -10,14 +10,13 @@ public class Player
     {
         PlayersStatistics = new HashSet<PlayerStatistic>();
     }
-    [Key] 
+
+    [Key]
     public int PlayerId { get; set; }
 
-    [MaxLength(ValidationConstants.PlayerNameMaxLength)]
-    public string Name { get; set; } = null!;
-
-    [MaxLength(ValidationConstants.SquadNumberMaxLength)]
-    public string SquadNumber { get; set; } = null!;
+    [MaxLength(ValidationConstants.PlayerNameLength)]
+    public string Name { get; set; }
+    public byte SquadNumber { get; set; }
     public byte Assists { get; set; }
 
     [ForeignKey(nameof(TownId))]
@@ -32,5 +31,6 @@ public class Player
     [ForeignKey(nameof(TeamId))]
     public int TeamId { get; set; }
     public virtual Team Team { get; set; }
+
     public virtual ICollection<PlayerStatistic> PlayersStatistics { get; set; }
 }

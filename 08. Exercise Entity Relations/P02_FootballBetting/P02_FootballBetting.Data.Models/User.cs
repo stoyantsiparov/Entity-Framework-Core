@@ -9,20 +9,22 @@ public class User
     {
         Bets = new HashSet<Bet>();
     }
+
     [Key]
     public int UserId { get; set; }
 
-    [MaxLength(ValidationConstants.UsernameMaxLength)]
-    public string Username { get; set; } = null!;
+    [MaxLength(ValidationConstants.UserUsernameLength)]
+    public string Username { get; set; }
 
-    [MaxLength(ValidationConstants.PasswordMaxLength)]
-    public string Password { get; set; } = null!;
+    [MaxLength(ValidationConstants.UserPasswordLength)]
+    public string Password { get; set; }
 
-    [MaxLength(ValidationConstants.EmailMaxLength)]
+    [MaxLength(ValidationConstants.UserEmailLength)]
     public string Email { get; set; }
 
-    [MaxLength(ValidationConstants.NameMaxLength)]
-    public string Name { get; set; } = null!;
+    [MaxLength(ValidationConstants.UserNameLength)]
+    public string Name { get; set; }
     public decimal Balance { get; set; }
+
     public virtual ICollection<Bet> Bets { get; set; }
 }

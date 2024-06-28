@@ -10,7 +10,7 @@ public class Bet
     public int BetId { get; set; }
     public decimal Amount { get; set; }
 
-    [MaxLength(ValidationConstants.PredictionMaxLength)]
+    [MaxLength(ValidationConstants.BetPredictionLength)]
     public string Prediction { get; set; }
     public DateTime DateTime { get; set; }
 

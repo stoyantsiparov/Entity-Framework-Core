@@ -15,7 +15,5 @@ public class PlayerStatistic
     public virtual Player Player { get; set; }
     public byte ScoredGoals { get; set; }
     public byte Assists { get; set; }
-
-    [MaxLength(ValidationConstants.MaxMinutesPlayedLength)]
     public int MinutesPlayed { get; set; }
 }

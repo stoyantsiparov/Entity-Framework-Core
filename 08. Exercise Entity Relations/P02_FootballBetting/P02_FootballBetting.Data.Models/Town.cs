@@ -15,12 +15,13 @@ public class Town
     [Key]
     public int TownId { get; set; }
 
-    [MaxLength(ValidationConstants.TownMaxNameLength)]
-    public string Name { get; set; } = null!;
+    [MaxLength(ValidationConstants.TownNameLength)]
+    public string Name { get; set; }
 
     [ForeignKey(nameof(CountryId))]
     public int CountryId { get; set; }
     public virtual Country Country { get; set; }
+
     public virtual ICollection<Team> Teams { get; set; }
     public virtual ICollection<Player> Players { get; set; }
 }

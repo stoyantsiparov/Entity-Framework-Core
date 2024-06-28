@@ -10,12 +10,12 @@ public class Country
     {
         Towns = new HashSet<Town>();
     }
+
     [Key]
     public int CountryId { get; set; }
 
-    [Required]
-    [MaxLength(ValidationConstants.CountryMaxNameLength)]
+    [MaxLength(ValidationConstants.CountryNameLength)]
     public string Name { get; set; }
 
-    public virtual ICollection<Town> Towns { get; set; }    
+    public virtual ICollection<Town> Towns { get; set; }
 }
