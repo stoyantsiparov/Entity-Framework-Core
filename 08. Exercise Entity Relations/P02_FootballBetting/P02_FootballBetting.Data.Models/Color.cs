@@ -8,8 +8,8 @@ public class Color
 {
     public Color()
     {
-        PrimaryKitTeams = new List<Team>();
-        SecondaryKitTeams = new List<Team>();
+        PrimaryKitTeams = new HashSet<Team>();
+        SecondaryKitTeams = new HashSet<Team>();
     }
 
     [Key]
@@ -18,9 +18,6 @@ public class Color
     [MaxLength(ValidationConstants.ColorNameMaxLength)]
     public string Name { get; set; } = null!;
 
-    [InverseProperty(nameof(Team.PrimaryColor))]
     public virtual ICollection<Team> PrimaryKitTeams { get; set; }
-
-    [InverseProperty(nameof(Team.SecondaryColor))]
     public virtual ICollection<Team> SecondaryKitTeams { get; set; }
 }

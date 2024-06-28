@@ -8,7 +8,7 @@ public class Player
 {
     public Player()
     {
-        PlayersStatistics = new List<PlayerStatistic>();
+        PlayersStatistics = new HashSet<PlayerStatistic>();
     }
     [Key] 
     public int PlayerId { get; set; }
@@ -18,18 +18,19 @@ public class Player
 
     [MaxLength(ValidationConstants.SquadNumberMaxLength)]
     public string SquadNumber { get; set; } = null!;
-    public int TownId { get; set; }
+    public byte Assists { get; set; }
 
     [ForeignKey(nameof(TownId))]
+    public int TownId { get; set; }
     public virtual Town Town { get; set; }
-    public int PositionId { get; set; }
 
     [ForeignKey(nameof(PositionId))]
+    public int PositionId { get; set; }
     public virtual Position Position { get; set; }
     public bool IsInjured { get; set; }
-    public int TeamId { get; set; }
 
     [ForeignKey(nameof(TeamId))]
+    public int TeamId { get; set; }
     public virtual Team Team { get; set; }
     public virtual ICollection<PlayerStatistic> PlayersStatistics { get; set; }
 }

@@ -8,8 +8,8 @@ public class Team
 {
     public Team()
     {
-        HomeTeamGoals = new List<Game>();
-        AwayTeamGoals = new List<Game>();
+        HomeGames = new List<Game>();
+        AwayGames = new List<Game>();
         Players = new HashSet<Player>();
     }
 
@@ -24,19 +24,19 @@ public class Team
     [MaxLength(ValidationConstants.InitialsMaxLength)]
     public string Initials { get; set; } = null!;
     public decimal Budget { get; set; }
-    public int PrimaryColorId { get; set; }
 
-    [ForeignKey(nameof(PrimaryColorId))]
-    public virtual Color PrimaryColor { get; set; }
+    [ForeignKey(nameof(PrimaryKitColorId))]
+    public int PrimaryKitColorId { get; set; }
+    public virtual Color PrimaryKitColor { get; set; }
 
-    public int SecondaryColorId { get; set; }
-    [ForeignKey(nameof(SecondaryColorId))]
-    public virtual Color SecondaryColor { get; set; }
+    [ForeignKey(nameof(SecondaryKitColorId))]
+    public int SecondaryKitColorId { get; set; }
+    public virtual Color SecondaryKitColor { get; set; }
 
-    public int TownId { get; set; }
     [ForeignKey(nameof(TownId))]
+    public int TownId { get; set; }
     public virtual Town Town { get; set; }
-    public virtual ICollection<Game> HomeTeamGoals { get; set; }
-    public virtual ICollection<Game> AwayTeamGoals { get; set; }
+    public virtual ICollection<Game> HomeGames { get; set; }
+    public virtual ICollection<Game> AwayGames { get; set; }
     public virtual ICollection<Player> Players { get; set; }
 }

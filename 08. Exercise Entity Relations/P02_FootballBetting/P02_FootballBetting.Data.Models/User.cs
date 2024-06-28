@@ -7,7 +7,7 @@ public class User
 {
     public User()
     {
-        Bets = new List<Bet>();
+        Bets = new HashSet<Bet>();
     }
     [Key]
     public int UserId { get; set; }

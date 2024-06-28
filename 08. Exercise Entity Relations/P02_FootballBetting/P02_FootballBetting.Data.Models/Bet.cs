@@ -13,12 +13,12 @@ public class Bet
     [MaxLength(ValidationConstants.PredictionMaxLength)]
     public string Prediction { get; set; }
     public DateTime DateTime { get; set; }
-    public int UserId { get; set; }
 
     [ForeignKey(nameof(UserId))]
+    public int UserId { get; set; }
     public virtual User User { get; set; }
-    public int GameId { get; set; }
 
     [ForeignKey(nameof(GameId))]
+    public int GameId { get; set; }
     public virtual Game Game { get; set; }
 }

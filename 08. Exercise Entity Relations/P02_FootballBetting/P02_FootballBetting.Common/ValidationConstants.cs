@@ -17,4 +17,5 @@ public class ValidationConstants
     public const int MaxMinutesPlayedLength = 5;
     public const int PlayerNameMaxLength = 40;
     public const int SquadNumberMaxLength = 2;
+    public const int GameResultLength = 5;
 }

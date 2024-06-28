@@ -11,6 +11,7 @@ public class FootballBettingContext : DbContext
     {
         
     }
+
     public FootballBettingContext(DbContextOptions dbContextOptions)
     : base(dbContextOptions)
     {
@@ -39,16 +40,38 @@ public class FootballBettingContext : DbContext
         modelBuilder.Entity<PlayerStatistic>()
             .HasKey(ps => new { ps.GameId, ps.PlayerId });
 
-        modelBuilder.Entity<Game>()
-            .HasOne(g => g.HomeTeam)
-            .WithMany(t => t.HomeTeamGoals)
-            .HasForeignKey(g => g.HomeTeamId)
-            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Team>(entity =>
+        {
+            entity.HasOne(t => t.PrimaryKitColor)
+                .WithMany(c => c.PrimaryKitTeams)
+                .HasForeignKey(t => t.PrimaryKitColorId)
+                .OnDelete(DeleteBehavior.NoAction);
 
-        modelBuilder.Entity<Game>()
-            .HasOne(g => g.AwayTeam)
-            .WithMany(t => t.AwayTeamGoals)
-            .HasForeignKey(g => g.AwayTeamId)
-            .OnDelete(DeleteBehavior.Restrict);
+            entity.HasOne(t => t.SecondaryKitColor)
+                .WithMany(c => c.SecondaryKitTeams)
+                .HasForeignKey(t => t.SecondaryKitColorId)
+                .OnDelete(DeleteBehavior.NoAction);
+        });
+
+        modelBuilder.Entity<Game>(entity =>
+        {
+            entity.HasOne(g => g.HomeTeam)
+                .WithMany(t => t.HomeGames)
+                .HasForeignKey(g => g.HomeTeamId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasOne(g => g.AwayTeam)
+                .WithMany(t => t.AwayGames)
+                .HasForeignKey(g => g.AwayTeamId)
+                .OnDelete(DeleteBehavior.NoAction);
+        });
+
+        modelBuilder.Entity<Player>(entity =>
+        {
+            entity.HasOne(p => p.Town)
+                .WithMany(t => t.Players)
+                .HasForeignKey(p => p.TownId)
+                .OnDelete(DeleteBehavior.NoAction);
+        });
     }
 }
