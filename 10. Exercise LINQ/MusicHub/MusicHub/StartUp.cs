@@ -6,7 +6,6 @@ namespace MusicHub
 
     using Data;
     using Initializer;
-    using MusicHub.Data.Models;
 
     public class StartUp
     {
@@ -44,6 +43,7 @@ namespace MusicHub
                 .OrderByDescending(a => a.AlbumPrice).ToList();
 
             StringBuilder sb = new StringBuilder();
+
             foreach (var album in albumsInfo)
             {
                 sb.AppendLine($"-AlbumName: {album.AlbumName}");
@@ -82,7 +82,7 @@ namespace MusicHub
                         .OrderBy(p => p)
                         .ToList(),
                     AlbumProducer = s.Album.Producer,
-                    Duration = s.Duration,
+                    s.Duration,
                 })
                 .OrderBy(s => s.Name)
                 .ThenBy(s => s.WriterName)
