@@ -304,16 +304,58 @@ public class StartUp
     }
 
     //14. Delete Project by Id
-    //TODO
     public static string DeleteProjectById(SoftUniContext context)
     {
-        return "";
+        var projectToDelete = context.Projects.Find(2);
+        if (projectToDelete != null)
+        {
+            var employeeProjects = context.EmployeesProjects
+                .Where(ep => ep.ProjectId == projectToDelete.ProjectId);
+
+            context.EmployeesProjects.RemoveRange(employeeProjects);
+
+            context.Projects.Remove(projectToDelete);
+            context.SaveChanges();
+        }
+
+        var projectNames = context.Projects
+            .OrderBy(p => p.ProjectId)
+            .Take(10)
+            .Select(p => p.Name)
+            .ToList();
+
+        return string.Join(Environment.NewLine, projectNames);
     }
 
     //15. Remove Town
-    //TODO
     public static string RemoveTown(SoftUniContext context)
     {
-        return "";
+        {
+            var town = context.Towns
+                .FirstOrDefault(t => t.Name == "Seattle");
+
+            var addressesInTown = context.Addresses
+                .Where(a => a.TownId == town.TownId)
+                .ToList();
+
+            foreach (var address in addressesInTown)
+            {
+                var employeesAtAddress = context.Employees
+                    .Where(e => e.AddressId == address.AddressId)
+                    .ToList();
+
+                foreach (var employee in employeesAtAddress)
+                {
+                    employee.AddressId = null;
+                }
+            }
+
+            context.Addresses.RemoveRange(addressesInTown);
+            context.Towns.Remove(town);
+
+            context.SaveChanges();
+
+            return $"{addressesInTown.Count} addresses in Seattle were deleted";
+        }
     }
 }
