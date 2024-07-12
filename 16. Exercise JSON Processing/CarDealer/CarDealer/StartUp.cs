@@ -1,7 +1,10 @@
-﻿using CarDealer.Data;
+﻿using System.Diagnostics;
+using CarDealer.Data;
 using CarDealer.DTOs.Import;
 using CarDealer.Models;
+using Castle.Core.Resource;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace CarDealer
 {
@@ -16,8 +19,10 @@ namespace CarDealer
             //string carText = File.ReadAllText("../../../Datasets/cars.json");
             //string customerText = File.ReadAllText("../../../Datasets/customers.json");
             //string saleText = File.ReadAllText("../../../Datasets/sales.json");
-            
+
             //Console.WriteLine(ImportSales(context, saleText));
+
+            Console.WriteLine(GetSalesWithAppliedDiscount(context));
         }
 
         //09. Import Suppliers
@@ -69,7 +74,7 @@ namespace CarDealer
                     Model = carDtO.Model,
                     TraveledDistance = carDtO.TraveledDistance
                 };
-                
+
                 cars.Add(newCar);
                 foreach (var partId in carDtO.PartsId.Distinct())
                 {
@@ -115,10 +120,147 @@ namespace CarDealer
         //14. Export Ordered Customers
         public static string GetOrderedCustomers(CarDealerContext context)
         {
+            var customers = context.Customers
+                .OrderBy(c => c.BirthDate)
+                .ThenBy(c => c.IsYoungDriver)
+                .ToList()
+                .Select(c => new
+                {
+                    c.Name,
+                    BirthDate = c.BirthDate.ToString("dd/MM/yyyy"),
+                    c.IsYoungDriver
+                })
+                .ToList();
+
+            return SerializeObjectWithJsonSettings(customers);
+        }
+
+        //15. Export Cars From Make Toyota
+        public static string GetCarsFromMakeToyota(CarDealerContext context)
+        {
+            var toyotaCars = context.Cars
+                .Select(tc => new
+                {
+                    tc.Id,
+                    tc.Make,
+                    tc.Model,
+                    tc.TraveledDistance
+                })
+                .Where(tc => tc.Make == "Toyota")
+                .OrderBy(tc => tc.Model)
+                .ThenByDescending(tc => tc.TraveledDistance)
+                .ToList();
+
+            return SerializeObjectWithJsonSettings(toyotaCars);
+        }
+
+        //16. Export Local Suppliers
+        public static string GetLocalSuppliers(CarDealerContext context)
+        {
+            var localSuppliers = context.Suppliers
+                .Where(s => !s.IsImporter)
+                .Select(s => new
+                {
+                    s.Id,
+                    s.Name,
+                    PartsCount = s.Parts.Count
+                })
+                .ToList();
+
+            return SerializeObjectWithJsonSettings(localSuppliers);
+        }
+
+        //17. Export Cars With Their List Of Parts
+        public static string GetCarsWithTheirListOfParts(CarDealerContext context)
+        {
+            var cars = context.Cars
+                .Select(c => new
+                {
+                    car = new
+                    {
+                        c.Make,
+                        c.Model,
+                        c.TraveledDistance,
+
+                    },
+                    parts = c.PartsCars
+                        .Select(pc => new
+                        {
+                            pc.Part.Name,
+                            Price = pc.Part.Price.ToString("F2")
+                        })
+                        .ToList()
+                })
+                .ToList();
+
+            return SerializeObjectWithJsonSettings(cars);
+        }
+
+        //18. Export Total Sales By Customer
+        public static string GetTotalSalesByCustomer(CarDealerContext context)
+        {
+            var customers = context.Customers
+                .Where(c => c.Sales.Any())
+                .Select(c => new
+                {
+                    FullName = c.Name,
+                    BoughtCars = c.Sales.Count,
+                    // SelectMany() -> Flattens the nested collection {PartsCars} associated with cars sold to the customer.
+                    SpentMoney = c.Sales.SelectMany(s => s.Car.PartsCars)
+                                                        .Sum(pc => pc.Part.Price)
+                })
+                .OrderByDescending(c => c.SpentMoney)
+                .ThenByDescending(c => c.BoughtCars)
+                .ToList();
+
+            return SerializeObjectWithJsonSettingsWithCamelCase(customers);
+        }
+
+        //19. Export Sales With Applied Discount
+        public static string GetSalesWithAppliedDiscount(CarDealerContext context)
+        {
+            var salesWithDiscount = context.Sales
+                .Take(10)
+                .Select(s => new
+                {
+                    car = new
+                    {
+                        s.Car.Make,
+                        s.Car.Model,
+                        s.Car.TraveledDistance
+                    },
+                    CustomerName = s.Customer.Name,
+                    Discount = s.Discount.ToString("F2"),
+                    Price = s.Car.PartsCars.Sum(pc => pc.Part.Price).ToString("F2"),
+                    PriceWithDiscount = (s.Car.PartsCars.Sum(pc => pc.Part.Price) * (1 - s.Discount / 100)).ToString("F2")
+                })
+                .ToList();
 
 
+            return SerializeObjectWithJsonSettingsWithCamelCase(salesWithDiscount);
+        }
 
-            return "";
+        private static string SerializeObjectWithJsonSettings(object obj)
+        {
+            var settings = new JsonSerializerSettings()
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+                Formatting = Formatting.Indented
+            };
+
+            return JsonConvert.SerializeObject(obj, settings);
+        }
+
+        private static string SerializeObjectWithJsonSettingsWithCamelCase(object obj)
+        {
+            var settings = new JsonSerializerSettings()
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+                Formatting = Formatting.Indented,
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+            };
+
+            return JsonConvert.SerializeObject(obj, settings);
         }
     }
 }
