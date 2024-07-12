@@ -236,8 +236,18 @@ namespace CarDealer
                 })
                 .ToList();
 
+            var output = salesWithDiscount
+                .Select(s => new
+                {
+                    s.car,
+                    customerName = s.CustomerName,
+                    discount = s.Discount,
+                    price = s.Price,
+                    priceWithDiscount = s.PriceWithDiscount
+                })
+                .ToList();
 
-            return SerializeObjectWithJsonSettingsWithCamelCase(salesWithDiscount);
+            return SerializeObjectWithJsonSettings(output);
         }
 
         private static string SerializeObjectWithJsonSettings(object obj)
@@ -250,7 +260,6 @@ namespace CarDealer
 
             return JsonConvert.SerializeObject(obj, settings);
         }
-
         private static string SerializeObjectWithJsonSettingsWithCamelCase(object obj)
         {
             var settings = new JsonSerializerSettings()
