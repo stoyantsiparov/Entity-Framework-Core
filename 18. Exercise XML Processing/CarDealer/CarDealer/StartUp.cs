@@ -311,10 +311,12 @@ namespace CarDealer
                     },
                     Discount = (int)s.Discount,
                     CustomerName = s.Customer.Name,
-                    Price = s.Car.PartsCars.Sum(pc => pc.Part.Price),
-                    PriceWithDiscount = Math.Round(s.Car.PartsCars.Sum(pc => pc.Part.Price) * (1 - s.Discount / 100), 2)
+                    Price = s.Car.PartsCars.Sum(p => p.Part.Price),
+                    PriceWithDiscount =
+                        new decimal(Math.Round((double)(s.Car.PartsCars
+                            .Sum(p => p.Part.Price) * (1 - (s.Discount / 100))), 4))
                 })
-                .ToList();
+                .ToArray();
 
             return SerializeToXml(sales, "sales");
         }

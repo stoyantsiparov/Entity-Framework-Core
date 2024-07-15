@@ -2,6 +2,7 @@
 
 namespace CarDealer.DTOs.Export;
 
+[XmlType("sale")]
 public class SaleWithDiscountExportDTO
 {
     [XmlElement("car")]
